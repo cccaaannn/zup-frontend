@@ -1,0 +1,35 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <div class="row">
+                <div class="col-10">
+                    <br><br>
+                    <div class="h3">
+                        Search user to start conversation
+                    </div>
+                </div>
+                <div class="col-2 d-flex justify-content-end">
+                    <button mat-button (click)="onLogout()">
+                        <mat-icon>keyboard_arrow_left</mat-icon>
+                        Logout
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <form [formGroup]="form" (ngSubmit)="submit()">
+                    <div class="row">
+                        <div class="col-9">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="username" formControlName="username" required>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-3 d-flex justify-content-end">
+                            <button class="col-4" type="submit" mat-button>Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
