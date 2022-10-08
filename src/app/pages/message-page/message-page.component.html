@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-xxl-10">
+            <br><br>
+            <div class="row">
+                <div class="col-sm-10 col-8">
+                    <div class="display-5">
+                        {{toUsername}}
+                    </div>
+                </div>
+                <div class="col-sm-2 col-4 d-flex justify-content-end">
+                    <button mat-button (click)="onBack()">
+                        <mat-icon>keyboard_arrow_left</mat-icon>
+                        Back
+                    </button>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="abs-center-spinner" *ngIf="spinner">
+                    <mat-spinner [diameter]="40" color="accent"></mat-spinner>
+                </div>
+                <div #infiniteScrollDiv infinite-scroll [infiniteScrollUpDistance]="1" [infiniteScrollThrottle]="1000"
+                    (scrolledUp)="onScroll()" [scrollWindow]="false" class="infinite-scroll-div">
+                    <div class="">
+                        <div *ngFor="let message of messages" class="row"
+                            [ngClass]="{'justify-content-end': isMessageBelongsToCurrentUser(message)}">
+                            <div class="col-lg-4 col-md-6 col-sm-6 col-10">
+                                <zup-message-bubble 
+                                [messageText]="message.messageText"
+                                    [messageDate]="message.createdAt"
+                                    [theme]="getMessageBubbleColor(message)"
+                                    >
+                                </zup-message-bubble>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <form [formGroup]="messageForm" (ngSubmit)="onSend()">
+                    <div class="row">
+                        <div class="col-md-11 col-10">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="Type a message" formControlName="messageText" required>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="col-md-1 col-2 d-flex justify-content-end">
+                            <button type="submit" mat-button>Send</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
