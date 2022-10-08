@@ -31,7 +31,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "app",
+            "prefix": "zup",
             "style": "kebab-case"
           }
         ]
