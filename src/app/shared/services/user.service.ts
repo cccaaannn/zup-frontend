@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class UserService {
 
-	private apiUrl: string = environment.userServiceApiUrl + "/user/";
+	private apiUrl: string = environment.userServiceApiUrl + "/users/";
 
 	constructor(private httpClient: HttpClient) { }
 
