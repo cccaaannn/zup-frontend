@@ -17,4 +17,25 @@ export class JwtService {
 		return null;
 	}
 
+	/*
+	 * Returns true if token is not presets, token is null or token is expired. 
+	*/
+	isExpired(): boolean {
+		const token: any = this.getDecodedToken();
+		if(!token || token == null) {
+			return true;
+		}
+
+		const now: Date = new Date();
+		// Jwt token exp date is in seconds, date accepts in milliseconds.
+		const tokenExpiration: Date = new Date(parseInt(token.exp) * 1000);
+
+		// If now is larger than expiration, token is expired.
+		if(now > tokenExpiration) {
+			return true;
+		}
+
+		return false;
+	}
+
 }
