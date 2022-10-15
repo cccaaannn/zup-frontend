@@ -1,6 +1,6 @@
 export const environment = {
-  userServiceApiUrl: 'http://localhost:8080/api/v1',
-  messageServiceApiUrl: 'http://localhost:8081/api/v1',
-  messageServiceWebsocketUrl: 'ws://localhost:8081/api/v1',
+  userServiceApiUrl: (window as { [key: string]: any })["env"]["USER_SERVICE_API_URL"] as string,
+  messageServiceApiUrl: (window as { [key: string]: any })["env"]["MESSAGE_SERVICE_API_URL"] as string,
+  messageServiceWebsocketUrl: (window as { [key: string]: any })["env"]["MESSAGE_SERVICE_WEBSOCKET_URL"] as string,
   production: true
 };

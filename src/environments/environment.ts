@@ -3,9 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  userServiceApiUrl: 'http://localhost:8080/api/v1',
-  messageServiceApiUrl: 'http://localhost:8081/api/v1',
-  messageServiceWebsocketUrl: 'ws://localhost:8081/api/v1',
+  userServiceApiUrl: 'http://localhost:8080/api/user/v1',
+  messageServiceApiUrl: 'http://localhost:8081/api/message/v1',
+  messageServiceWebsocketUrl: 'ws://localhost:8081/api/message/v1',
   production: false
 };
 
