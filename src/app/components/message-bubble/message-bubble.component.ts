@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { isThisYear, isToday } from 'src/app/shared/utils/date-utils';
 
 @Component({
 	selector: 'zup-message-bubble',
@@ -20,7 +21,16 @@ export class MessageBubbleComponent {
 
 	formatDate(): string {
 		const date: Date = new Date(Date.parse(this.messageDate));
-		return date.toLocaleTimeString('tr-TR').substring(0, 5);
+		
+		if(isToday(date)) {
+			return date.toLocaleTimeString('tr-TR').substring(0, 5);
+		}
+		
+		if(isThisYear(date)) {
+			return `${date.toLocaleDateString('tr-TR').substring(0, 5)} - ${date.toLocaleTimeString('tr-TR').substring(0, 5)}`; 
+		}
+
+		return `${date.toLocaleDateString('tr-TR')} - ${date.toLocaleTimeString('tr-TR').substring(0, 5)}`;
 	}
 
 }
