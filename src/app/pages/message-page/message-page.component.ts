@@ -2,8 +2,9 @@ import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@ang
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { MessageModel } from 'src/app/data/models/message.model';
-import { RequestScroll } from 'src/app/data/types/RequestScroll';
+import { AppRoutes } from 'src/app/shared/data/enums/app-routes';
+import { MessageModel } from 'src/app/shared/data/models/message.model';
+import { RequestScroll } from 'src/app/shared/data/types/RequestScroll';
 import { JwtService } from 'src/app/shared/services/jwt.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { RealtimeMessageService } from 'src/app/shared/services/realtime-message.service';
@@ -149,7 +150,7 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 	}
 
 	onBack() {
-		this.router.navigate(["/search-user"]);
+		this.router.navigate([AppRoutes.SEARCH_USER]);
 	}
 
 	messageForm: FormGroup = new FormGroup({
