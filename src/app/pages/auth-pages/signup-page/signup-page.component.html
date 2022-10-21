@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <br><br>
+            <div class="card">
+                <div class="container">
+                    <div class="display-6 mb-1">Signup</div>
+                    <div>
+                        <form [formGroup]="form" (ngSubmit)="submit()">
+                            <div class="row">
+                                <mat-form-field>
+                                    <input type="email" matInput placeholder="email" formControlName="email" required email autocomplete>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="row">
+                                <mat-form-field>
+                                    <input type="text" matInput placeholder="username" formControlName="username" required autocomplete>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="row">
+                                <mat-form-field>
+                                    <input type="password" matInput placeholder="Password" formControlName="password" required autocomplete>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="row">
+                                <mat-form-field>
+                                    <input type="password" matInput placeholder="Password" formControlName="confirmPassword" required autocomplete>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-10">
+                                    <div class="col-10">
+                                        <a routerLink="/{{routeService.AppRoutes.LOGIN}}" type="button">Already have account, Login!</a>
+                                    </div>
+                                    <div class="row">
+                                        <a routerLink="/{{routeService.AppRoutes.RESEND_VERIFICATION}}" type="button">Could not get activation mail, resend activation mail</a>
+                                    </div>                        
+                                </div>
+                                <div class="col-2 d-flex justify-content-end">
+                                    <button type="submit" mat-button>Signup</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
