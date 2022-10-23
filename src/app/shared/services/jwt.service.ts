@@ -12,7 +12,12 @@ export class JwtService {
 	getDecodedToken(): any {
 		const token = this.storageService.getToken();
 		if (token && token != null) {
-			return jwtDecode(token);
+			try {
+				return jwtDecode(token);
+			}
+			catch {
+				return null;
+			}
 		}
 		return null;
 	}

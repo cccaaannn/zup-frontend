@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LoginModel } from 'src/app/data/models/login.model';
 import { environment } from 'src/environments/environment';
+import { DataResult } from '../data/models/results/DataResult';
+import { Result } from '../data/models/results/Result';
+import { UserModel } from '../data/models/user.model';
 
 
 @Injectable({
@@ -14,12 +16,20 @@ export class UserService {
 
 	constructor(private httpClient: HttpClient) { }
 
-	getById(userId: number): Observable<any> {
+	getById(userId: number): Observable<DataResult<UserModel>> {
 		return this.httpClient.get<any>(this.apiUrl + userId);
 	}
 
-	getByUsername(username: string): Observable<any> {
+	getByUsername(username: string): Observable<DataResult<UserModel>> {
 		return this.httpClient.get<any>(this.apiUrl + "username/" + username);
+	}
+
+	activate(userId: number): Observable<Result> {
+		return this.httpClient.patch<any>(`${this.apiUrl}${userId}/activate`, {});
+	}
+	
+	suspend(userId: number): Observable<Result> {
+		return this.httpClient.patch<any>(`${this.apiUrl}${userId}/suspend`, {});
 	}
 
 }

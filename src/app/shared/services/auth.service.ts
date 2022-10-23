@@ -1,8 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LoginModel } from 'src/app/data/models/login.model';
+import { LoginModel } from 'src/app/shared/data/models/login.model';
 import { environment } from 'src/environments/environment';
+import { AccessTokenModel } from '../data/models/access-token.model';
+import { DataResult } from '../data/models/results/DataResult';
+import { Result } from '../data/models/results/Result';
+import { SignupModel } from '../data/models/signup.model';
 
 @Injectable({
 	providedIn: 'root'
@@ -13,8 +17,12 @@ export class AuthService {
 
 	constructor(private httpClient: HttpClient) { }
 
-	login(loginModel: LoginModel): Observable<any> {
+	login(loginModel: LoginModel): Observable<DataResult<AccessTokenModel>> {
 		return this.httpClient.post<any>(this.apiUrl + "login", loginModel);
+	}
+
+	signup(signupModel: SignupModel): Observable<Result> {
+		return this.httpClient.post<any>(this.apiUrl + "signup", signupModel);
 	}
 
 }

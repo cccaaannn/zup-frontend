@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, Observable } from 'rxjs';
-import { MessageModel } from 'src/app/data/models/message.model';
+import { MessageModel } from '../data/models/message.model';
 import { UserService } from './user.service';
 import { WebsocketService } from './websocket.service';
 
