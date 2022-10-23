@@ -2,9 +2,9 @@ import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@ang
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AppRoutes } from 'src/app/shared/data/enums/app-routes';
+import { AppRoutes } from 'src/app/shared/data/enums/routes';
 import { MessageModel } from 'src/app/shared/data/models/message.model';
-import { RequestScroll } from 'src/app/shared/data/types/RequestScroll';
+import { RequestScroll } from 'src/app/shared/data/types/request-scroll';
 import { JwtService } from 'src/app/shared/services/jwt.service';
 import { MessageService } from 'src/app/shared/services/message.service';
 import { RealtimeMessageService } from 'src/app/shared/services/realtime-message.service';

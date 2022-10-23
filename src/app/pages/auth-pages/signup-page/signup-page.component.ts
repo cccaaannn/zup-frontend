@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { AppRoutes } from 'src/app/shared/data/enums/app-routes';
+import { AppRoutes } from 'src/app/shared/data/enums/routes';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { RouteService } from 'src/app/shared/services/route.service';
 import { ConfirmPasswordValidator } from 'src/app/shared/validators/ConfirmPasswordValidator';

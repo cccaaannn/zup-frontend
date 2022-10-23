@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { AppRoutes } from 'src/app/shared/data/enums/routes';
 import { StorageService } from 'src/app/shared/services/storage.service';
 import { UserService } from 'src/app/shared/services/user.service';
 
@@ -29,7 +30,7 @@ export class SearchUserPageComponent {
 			this.userService.getByUsername(this.form.value.username).subscribe({
 				next: (res: any) => {
 					console.log(res);
-					this.router.navigate(['/messages'], { queryParams: { user: res.data.id } });
+					this.router.navigate([AppRoutes.MESSAGES], { queryParams: { user: res.data.id } });
 				},
 				error: (err: any) => {
 					console.log(err);
@@ -43,7 +44,7 @@ export class SearchUserPageComponent {
 
 	onLogout() {
 		this.storageService.removeToken();
-		this.router.navigate(['/login']);
+		this.router.navigate([AppRoutes.LOGIN]);
 	}
 
 }
