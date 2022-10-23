@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { webSocket } from 'rxjs/webSocket';
 import { environment } from 'src/environments/environment';
+import { JwtService } from './jwt.service';
 import { StorageService } from './storage.service';
 
 
@@ -15,7 +16,7 @@ export class WebsocketService {
 	connectionStatus: Subject<boolean> = new BehaviorSubject(false);
 	socket: any;
 
-	constructor(private storageService: StorageService, private snackBar: MatSnackBar) {
+	constructor(private storageService: StorageService, private snackBar: MatSnackBar, private jwtService: JwtService) {
 		if(!this.socket) {
 			this.initWebsocket();
 		}
@@ -37,13 +38,19 @@ export class WebsocketService {
 
 		const url: string = `${this.websocketUrl}/${token}`
 
-		// TODO handle invalid or expired token
+		// Check for e expired token before connection.
+		if(this.jwtService.isExpired()) {
+			console.log("token is expired socket not connected");
+			this.connectionStatus.next(false);
+			return;
+		}
+
 		this.socket = webSocket(url);
 
 		this.connectionStatus.next(true);
 	}
 
-	getWebsocket(): Observable<any> {
+	getWebsocket(): Observable<BehaviorSubject<boolean>> {
 		return this.socket;
 	}
 
