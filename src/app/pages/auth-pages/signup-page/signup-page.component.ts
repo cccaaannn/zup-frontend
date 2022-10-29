@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'src/app/shared/data/enums/routes';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { AuthService } from 'src/app/shared/services/api/auth.service';
 import { RouteService } from 'src/app/shared/services/route.service';
 import { ConfirmPasswordValidator } from 'src/app/shared/validators/ConfirmPasswordValidator';
 
@@ -21,6 +21,8 @@ export class SignupPageComponent {
 		public routeService: RouteService
 	) { }
 
+	@ViewChild('formElement') formElement!: ElementRef;
+
 	form: FormGroup = new FormGroup({
 		email: new FormControl(''),
 		username: new FormControl(''),
@@ -33,6 +35,8 @@ export class SignupPageComponent {
 	);
 
 	submit() {
+		this.formElement?.nativeElement.classList.add("was-validated");
+
 		if (!this.form.valid) {
 			this.snackBar.open('Please fill required fields', 'X', {
 				duration: 3000

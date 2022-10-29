@@ -1,53 +1,64 @@
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-4">
-            <br><br>
-            <div class="card">
-                <div class="container">
-                    <div class="display-6 mb-1">Signup</div>
-                    <div>
-                        <form [formGroup]="form" (ngSubmit)="submit()">
-                            <div class="row">
-                                <mat-form-field>
-                                    <input type="email" matInput placeholder="email" formControlName="email" required email autocomplete>
-                                </mat-form-field>
-                            </div>
-
-                            <div class="row">
-                                <mat-form-field>
-                                    <input type="text" matInput placeholder="username" formControlName="username" required autocomplete>
-                                </mat-form-field>
-                            </div>
-
-                            <div class="row">
-                                <mat-form-field>
-                                    <input type="password" matInput placeholder="Password" formControlName="password" required autocomplete>
-                                </mat-form-field>
-                            </div>
-
-                            <div class="row">
-                                <mat-form-field>
-                                    <input type="password" matInput placeholder="Password" formControlName="confirmPassword" required autocomplete>
-                                </mat-form-field>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-10">
-                                    <div class="col-10">
-                                        <a routerLink="/{{routeService.AppRoutes.LOGIN}}" type="button">Already have account, Login!</a>
-                                    </div>
-                                    <div class="row">
-                                        <a routerLink="/{{routeService.AppRoutes.RESEND_VERIFICATION}}" type="button">Could not get activation mail, resend activation mail</a>
-                                    </div>                        
+<section class="h-100">
+    <div class="container h-100">
+        <div class="row justify-content-sm-center h-100">
+            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                <div class="text-center my-5">
+                    <img src="assets/icons/zup-icon-192x192.png" alt="logo" width="100">
+                </div>
+                <div class="card shadow-md">
+                    <div class="card-body p-5">
+                        <h1 class="fs-4 card-title fw-bold mb-4">Signup</h1>
+                        <form #formElement [formGroup]="form" (ngSubmit)="submit()" class="row g-3 needs-validation">
+                            <div class="mb-1">
+                                <label class="mb-2 text-muted" for="email">Email</label>
+                                <input type="email" class="form-control" name="email" placeholder="email" formControlName="email" required autofocus autocomplete>
+                                <div class="invalid-feedback">
+                                    Email is required
                                 </div>
-                                <div class="col-2 d-flex justify-content-end">
-                                    <button type="submit" mat-button>Signup</button>
+                            </div>
+
+                            <div class="mb-1">
+                                <label class="mb-2 text-muted" for="username">Username</label>
+                                <input type="text" class="form-control" name="username" placeholder="username" formControlName="username" required autofocus autocomplete>
+                                <div class="invalid-feedback">
+                                    username is required
                                 </div>
+                            </div>
+
+                            <div class="mb-1">
+                                <label class="mb-2 text-muted" for="password">Password</label>
+                                <input type="password" class="form-control" name="password" placeholder="Password" formControlName="password" required autocomplete>
+                                <div class="invalid-feedback">
+                                    Password is required
+                                </div>
+                            </div>
+
+                            <div class="mb-1">
+                                <label class="mb-2 text-muted" for="confirmPassword">Confirm password</label>
+                                <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm password" formControlName="confirmPassword" required autocomplete>
+                                <div class="invalid-feedback">
+                                    Confirm password is required
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary text-light">
+                                    Signup
+                                </button>
                             </div>
                         </form>
                     </div>
+
+                    <div class="card-footer d-flex align-items-center">
+                        <div>
+                            <a routerLink="/{{routeService.AppRoutes.LOGIN}}" class="text-dark">Login</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-5 text-muted">
+                    Copyright &copy; 2022 &mdash; Zup 
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>

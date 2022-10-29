@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef  } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppRoutes } from 'src/app/shared/data/enums/routes';
-import { AccountService } from 'src/app/shared/services/account.service';
+import { AccountService } from 'src/app/shared/services/api/account.service';
 import { RouteService } from 'src/app/shared/services/route.service';
 import { ConfirmPasswordValidator } from 'src/app/shared/validators/ConfirmPasswordValidator';
 
@@ -21,6 +21,8 @@ export class ResetPasswordComponent implements OnInit {
 		private accountService: AccountService,
 		public routeService: RouteService
 	) { }
+
+	@ViewChild('formElement') formElement!: ElementRef;
 
 	token: string = "";
 
@@ -40,6 +42,8 @@ export class ResetPasswordComponent implements OnInit {
 	}
 
 	submit() {
+		this.formElement?.nativeElement.classList.add("was-validated");
+		
 		if (!this.form.valid) {
 			this.snackBar.open('Please fill required fields', 'X', {
 				duration: 3000

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AccountService } from 'src/app/shared/services/account.service';
+import { AccountService } from 'src/app/shared/services/api/account.service';
+import { RouteService } from 'src/app/shared/services/route.service';
 
 @Component({
 	selector: 'zup-verify-account',
@@ -11,7 +12,8 @@ export class VerifyAccountComponent implements OnInit {
 
 	constructor(
 		private accountService: AccountService,
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		public routeService: RouteService
 	) { }
 
 	activationStatus: string = "Activating account";
