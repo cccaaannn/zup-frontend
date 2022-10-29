@@ -15,6 +15,9 @@ export class MessageBubbleComponent {
 	messageDate: string = "";
 
 	@Input()
+	messageStatus: number = 0;
+
+	@Input()
 	theme: MessageBubbleComponentTheme = { color: "black", backgroundColor: "#00b73d" }
 
 	constructor() { }
