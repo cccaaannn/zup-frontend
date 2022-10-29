@@ -17,19 +17,19 @@ export class AccountService {
 	constructor(private httpClient: HttpClient) { }
 
 	sendVerifyAccountEmail(userEmailModel: UserEmailModel): Observable<Result> {
-		return this.httpClient.post<any>(`${this.apiUrl}send-verification`, userEmailModel);
+		return this.httpClient.post<Result>(`${this.apiUrl}send-verification`, userEmailModel);
 	}
 
 	verifyAccount(accessTokenModel: AccessTokenModel): Observable<Result> {
-		return this.httpClient.post<any>(`${this.apiUrl}verify`, accessTokenModel);
+		return this.httpClient.post<Result>(`${this.apiUrl}verify`, accessTokenModel);
 	}
 
 	sendForgetPasswordEmail(userEmailModel: UserEmailModel): Observable<Result> {
-		return this.httpClient.post<any>(`${this.apiUrl}password/send-reset`, userEmailModel);
+		return this.httpClient.post<Result>(`${this.apiUrl}password/send-reset`, userEmailModel);
 	}
 
 	resetPassword(passwordResetModel: PasswordResetModel): Observable<Result> {
-		return this.httpClient.post<any>(`${this.apiUrl}password/reset`, passwordResetModel);
+		return this.httpClient.post<Result>(`${this.apiUrl}password/reset`, passwordResetModel);
 	}
 
 }

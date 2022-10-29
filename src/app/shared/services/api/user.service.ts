@@ -17,19 +17,19 @@ export class UserService {
 	constructor(private httpClient: HttpClient) { }
 
 	getById(userId: number): Observable<DataResult<UserModel>> {
-		return this.httpClient.get<any>(this.apiUrl + userId);
+		return this.httpClient.get<DataResult<UserModel>>(this.apiUrl + userId);
 	}
 
 	getByUsername(username: string): Observable<DataResult<UserModel>> {
-		return this.httpClient.get<any>(this.apiUrl + "username/" + username);
+		return this.httpClient.get<DataResult<UserModel>>(this.apiUrl + "username/" + username);
 	}
 
 	activate(userId: number): Observable<Result> {
-		return this.httpClient.patch<any>(`${this.apiUrl}${userId}/activate`, {});
+		return this.httpClient.patch<Result>(`${this.apiUrl}${userId}/activate`, {});
 	}
 	
 	suspend(userId: number): Observable<Result> {
-		return this.httpClient.patch<any>(`${this.apiUrl}${userId}/suspend`, {});
+		return this.httpClient.patch<Result>(`${this.apiUrl}${userId}/suspend`, {});
 	}
 
 }

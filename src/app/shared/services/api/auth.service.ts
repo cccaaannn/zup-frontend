@@ -18,11 +18,11 @@ export class AuthService {
 	constructor(private httpClient: HttpClient) { }
 
 	login(loginModel: LoginModel): Observable<DataResult<AccessTokenModel>> {
-		return this.httpClient.post<any>(this.apiUrl + "login", loginModel);
+		return this.httpClient.post<DataResult<AccessTokenModel>>(this.apiUrl + "login", loginModel);
 	}
 
 	signup(signupModel: SignupModel): Observable<Result> {
-		return this.httpClient.post<any>(this.apiUrl + "signup", signupModel);
+		return this.httpClient.post<Result>(this.apiUrl + "signup", signupModel);
 	}
 
 }
