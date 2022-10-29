@@ -31,8 +31,12 @@
                         <div *ngFor="let message of messages" class="row"
                             [ngClass]="{'justify-content-end': isMessageBelongsToCurrentUser(message)}">
                             <div class="col-lg-4 col-md-6 col-sm-6 col-10">
-                                <zup-message-bubble [messageText]="message.messageText"
-                                    [messageDate]="message.createdAt" [theme]="getMessageBubbleColor(message)">
+                                <zup-message-bubble 
+                                    [messageText]="message.messageText"
+                                    [messageDate]="message.createdAt"
+                                    [messageStatus]="getMessageStatus(message)"
+                                    [theme]="getMessageBubbleColor(message)"
+                                >
                                 </zup-message-bubble>
                             </div>
                         </div>

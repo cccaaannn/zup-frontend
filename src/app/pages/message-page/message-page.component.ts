@@ -9,6 +9,7 @@ import { JwtService } from 'src/app/shared/services/jwt.service';
 import { MessageService } from 'src/app/shared/services/api/message.service';
 import { RealtimeMessageService } from 'src/app/shared/services/api/realtime-message.service';
 import { UserService } from 'src/app/shared/services/api/user.service';
+import { RequestHelpers } from 'src/app/shared/utils/request-helpers';
 
 @Component({
 	selector: 'zup-message-page',
@@ -50,7 +51,7 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 
 		this.activatedRoute.queryParams.subscribe({
 			next: (params: Params) => {
-				console.log(params);
+				console.debug(params);
 
 				const userId = params["user"];
 				if (!userId) {
@@ -65,16 +66,50 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 
 				this.userService.getById(this.toId).subscribe({
 					next: (res: any) => {
-						console.log(res);
+						console.debug(res);
 						this.toUsername = res.data.username;
+					},
+					error: (err: any) => {
+						console.debug(err);
+						if (RequestHelpers.is4XX(err.status)) {
+							this.snackBar.open('Invalid user', 'X', {
+								duration: 3000
+							});
+						}
+						if (RequestHelpers.is5XX(err.status)) {
+							this.snackBar.open('Server error', 'X', {
+								duration: 3000
+							});
+						}
 					}
 				})
 
 				this.messageService.getConversation(this.toId).subscribe({
 					next: (res: any) => {
-						console.log(res);
+						console.debug(res);
 						this.messages = res.data.content.reverse();
 						this.requestScroll = { status: true, toBottom: true, height: 300 }
+
+						// Set all as read
+						this.messageService.setAllAsRead(this.toId).subscribe({
+							next: (res: any) => {
+								console.debug(res);
+							}
+						})
+
+					},
+					error: (err: any) => {
+						console.debug(err);
+						if (RequestHelpers.is4XX(err.status)) {
+							this.snackBar.open('Invalid user', 'X', {
+								duration: 3000
+							});
+						}
+						if (RequestHelpers.is5XX(err.status)) {
+							this.snackBar.open('Server error', 'X', {
+								duration: 3000
+							});
+						}
 					}
 				})
 
@@ -85,14 +120,20 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 							this.messages.push(message);
 							this.requestScroll = { status: true, toBottom: true, height: 300 }
 						}
+					},
+					error: (err: any) => {
+						console.debug(err);
+						this.snackBar.open('Server disconnected', 'X', {
+							duration: 3000
+						});
 					}
 				});
 
 			}
 		});
 
-
 	}
+
 
 	ngAfterViewChecked() {
 		this.scrollTo();
@@ -132,18 +173,25 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 		return false;
 	}
 
+	getMessageStatus(message: MessageModel) {
+		if(this.isMessageBelongsToCurrentUser(message)) {
+			return message.messageStatus;
+		}
+		return 0;
+	}
+
 
 	onScroll(): void {
 		this.spinner = true;
 		this.messageService.getConversation(this.toId, ++this.currentPage).subscribe({
 			next: (res: any) => {
-				console.log(res);
+				console.debug(res);
 				this.messages = [...res.data.content.reverse(), ...this.messages];
 				this.requestScroll = { status: true, toBottom: false, height: 300 }
 				this.spinner = false;
 			},
 			error: (err: any) => {
-				console.log(err);
+				console.debug(err);
 				this.spinner = false;
 			}
 		})
@@ -181,7 +229,7 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 				this.messageForm.setValue({ messageText: "" });
 			},
 			error: (err: any) => {
-				console.log(err);
+				console.debug(err);
 				this.snackBar.open('Failed to send message', 'X', {
 					duration: 3000
 				});

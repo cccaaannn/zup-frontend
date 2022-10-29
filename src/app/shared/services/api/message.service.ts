@@ -16,11 +16,19 @@ export class MessageService {
 	constructor(private httpClient: HttpClient) { }
 
 	getConversation(toId: number, page?: number, size?: number): Observable<DataResult<MessageModel>> {
-		return this.httpClient.get<any>(`${this.apiUrl}conversation/${toId}?size=${size || 15}&page=${page || 1}`);
+		return this.httpClient.get<DataResult<MessageModel>>(`${this.apiUrl}conversation/${toId}?size=${size || 15}&page=${page || 1}`);
 	}
 
-	send(message: any): Observable<Result> {
-		return this.httpClient.post<any>(this.apiUrl + "send", message);
+	send(message: MessageModel): Observable<Result> {
+		return this.httpClient.post<Result>(this.apiUrl + "send", message);
+	}
+
+	setAsRead(id: number): Observable<Result> {
+		return this.httpClient.put<Result>(this.apiUrl + "read/" + id, {});
+	}
+
+	setAllAsRead(userId: number): Observable<Result> {
+		return this.httpClient.put<Result>(this.apiUrl + "read-all?userId=" + userId, {});
 	}
 
 }
