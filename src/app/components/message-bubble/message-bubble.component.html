@@ -1,9 +1,7 @@
 <div class="container" [ngStyle]="{'color': theme.color, 'background-color': theme.backgroundColor}">
     <div class="row mb-0">
         <div class="col-10">
-            <p class="mb-0">
-                {{messageText}}
-            </p>
+            <p class="mb-0" [innerHtml]="messageText | linky"></p>
         </div>
     </div>
     <div class="row justify-content-end">
