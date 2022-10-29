@@ -13,7 +13,7 @@ import { ForgetPasswordComponent } from './auth-pages/forget-password/forget-pas
 import { ResetPasswordComponent } from './auth-pages/reset-password/reset-password.component';
 import { VerifyAccountComponent } from './auth-pages/verify-account/verify-account.component';
 import { ResendVerificationComponent } from './auth-pages/resend-verification/resend-verification.component';
-
+import { LinkyModule } from 'ngx-linky';
 
 @NgModule({
   declarations: [
@@ -33,7 +33,8 @@ import { ResendVerificationComponent } from './auth-pages/resend-verification/re
     FormsModule,
     ReactiveFormsModule,
     InfiniteScrollModule,
-    RouterModule
+    RouterModule,
+    LinkyModule
   ]
 })
 export class PagesModule { }

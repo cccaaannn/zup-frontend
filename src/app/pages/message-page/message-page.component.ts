@@ -6,9 +6,9 @@ import { AppRoutes } from 'src/app/shared/data/enums/routes';
 import { MessageModel } from 'src/app/shared/data/models/message.model';
 import { RequestScroll } from 'src/app/shared/data/types/request-scroll';
 import { JwtService } from 'src/app/shared/services/jwt.service';
-import { MessageService } from 'src/app/shared/services/message.service';
-import { RealtimeMessageService } from 'src/app/shared/services/realtime-message.service';
-import { UserService } from 'src/app/shared/services/user.service';
+import { MessageService } from 'src/app/shared/services/api/message.service';
+import { RealtimeMessageService } from 'src/app/shared/services/api/realtime-message.service';
+import { UserService } from 'src/app/shared/services/api/user.service';
 
 @Component({
 	selector: 'zup-message-page',

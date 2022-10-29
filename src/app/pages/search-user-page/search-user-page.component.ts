@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'src/app/shared/data/enums/routes';
 import { StorageService } from 'src/app/shared/services/storage.service';
-import { UserService } from 'src/app/shared/services/user.service';
+import { UserService } from 'src/app/shared/services/api/user.service';
 
 @Component({
 	selector: 'zup-search-user-page',

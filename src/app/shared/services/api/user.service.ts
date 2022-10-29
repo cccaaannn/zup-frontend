@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { DataResult } from '../data/models/results/DataResult';
-import { Result } from '../data/models/results/Result';
-import { UserModel } from '../data/models/user.model';
+import { DataResult } from '../../data/models/results/DataResult';
+import { Result } from '../../data/models/results/Result';
+import { UserModel } from '../../data/models/user.model';
 
 
 @Injectable({

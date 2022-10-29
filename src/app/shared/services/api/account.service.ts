@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { AccessTokenModel } from '../data/models/access-token.model';
-import { PasswordResetModel } from '../data/models/password-reset.model';
-import { Result } from '../data/models/results/Result';
-import { UserEmailModel } from '../data/models/user-email.model';
+import { AccessTokenModel } from '../../data/models/access-token.model';
+import { PasswordResetModel } from '../../data/models/password-reset.model';
+import { Result } from '../../data/models/results/Result';
+import { UserEmailModel } from '../../data/models/user-email.model';
 
 @Injectable({
 	providedIn: 'root'

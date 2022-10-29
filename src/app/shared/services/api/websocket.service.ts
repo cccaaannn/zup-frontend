@@ -3,8 +3,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { webSocket } from 'rxjs/webSocket';
 import { environment } from 'src/environments/environment';
-import { JwtService } from './jwt.service';
-import { StorageService } from './storage.service';
+import { JwtService } from '../jwt.service';
+import { StorageService } from '../storage.service';
 
 
 @Injectable({
