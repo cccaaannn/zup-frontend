@@ -5,6 +5,7 @@ import { DataResult } from 'src/app/shared/data/models/results/DataResult';
 import { environment } from 'src/environments/environment';
 import { MessageCountModel } from '../../data/models/message-count';
 import { MessageModel } from '../../data/models/message.model';
+import { Pagination } from '../../data/models/pagination';
 import { Result } from '../../data/models/results/Result';
 
 @Injectable({
@@ -16,8 +17,8 @@ export class MessageService {
 
 	constructor(private httpClient: HttpClient) { }
 
-	getConversation(toId: number, page?: number, size?: number): Observable<DataResult<MessageModel>> {
-		return this.httpClient.get<DataResult<MessageModel>>(`${this.apiUrl}conversation/${toId}?size=${size || 15}&page=${page || 1}`);
+	getConversation(toId: number, page?: number, size?: number): Observable<DataResult<Pagination<MessageModel[]>>> {
+		return this.httpClient.get<DataResult<Pagination<MessageModel[]>>>(`${this.apiUrl}conversation/${toId}?size=${size || 15}&page=${page || 1}`);
 	}
 
 	send(message: MessageModel): Observable<Result> {

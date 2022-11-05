@@ -62,13 +62,14 @@ export class SearchUserPageComponent implements OnInit {
 								nonFriendIds.push(parseInt(key));
 							}
 						}
-						this.userService.getAllByIds(nonFriendIds).subscribe({
-							next: (nonFriendUsers: DataResult<any>) => {
-								console.debug(nonFriendUsers, "non friend users");
-
-								this.usersNonFriends = nonFriendUsers.data.content;
-							}
-						})
+						if(nonFriendIds.length != 0) {
+							this.userService.getAllByIds(nonFriendIds).subscribe({
+								next: (nonFriendUsers: DataResult<any>) => {
+									console.debug(nonFriendUsers, "non friend users");
+									this.usersNonFriends = nonFriendUsers.data.content;
+								}
+							})
+						}
 
 					}
 				})

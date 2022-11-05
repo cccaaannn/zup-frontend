@@ -185,6 +185,10 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 		return 0;
 	}
 
+	getFriendTooltipText() {
+		return this.isFriend ? "Remove from friend" : "Add to friend"
+	}
+
 
 	onScroll(): void {
 		this.spinner = true;

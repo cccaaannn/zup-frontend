@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Pagination } from '../../data/models/pagination';
 import { DataResult } from '../../data/models/results/DataResult';
 import { Result } from '../../data/models/results/Result';
 import { UserModel } from '../../data/models/user.model';
@@ -16,12 +17,12 @@ export class UserService {
 
 	constructor(private httpClient: HttpClient) { }
 
-	getAll(page?: number, size?: number, sort?: string, order?: string): Observable<DataResult<any>> {
-		return this.httpClient.get<DataResult<any>>(`${this.apiUrl}?page=${page || 0}&size=${size || 10}&sort=${sort || "id"}&order=${order || "desc"}`);
+	getAll(page?: number, size?: number, sort?: string, order?: string): Observable<DataResult<Pagination<UserModel[]>>> {
+		return this.httpClient.get<DataResult<Pagination<UserModel[]>>>(`${this.apiUrl}?page=${page || 0}&size=${size || 10}&sort=${sort || "id"}&order=${order || "desc"}`);
 	}
 
-	getAllByIds(ids: number[], sort?: string, order?: string): Observable<DataResult<any>> {
-		return this.httpClient.get<DataResult<any>>(`${this.apiUrl}?ids=${ids}&size=${ids.length}&sort=${sort || "id"}&order=${order || "desc"}`);
+	getAllByIds(ids: number[], sort?: string, order?: string): Observable<DataResult<Pagination<UserModel[]>>> {
+		return this.httpClient.get<DataResult<Pagination<UserModel[]>>>(`${this.apiUrl}?size=${ids.length}&sort=${sort || "id"}&order=${order || "desc"}&ids=${ids}`);
 	}
 
 	getById(userId: number): Observable<DataResult<UserModel>> {
