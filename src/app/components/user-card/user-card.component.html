@@ -1,0 +1,6 @@
+<div class="card btn btn-light">
+    <div class="row shadow-md " (click)="onClick()">
+            <div class="col-10 d-flex align-items-center h3">{{user.username | truncate:[20]}}</div>
+            <div class="col-2 d-flex align-items-center justify-content-end h3">{{unreadMessageCount !== 0 ? unreadMessageCount: ""}}</div>
+    </div>
+</div>
