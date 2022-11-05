@@ -16,6 +16,14 @@ export class UserService {
 
 	constructor(private httpClient: HttpClient) { }
 
+	getAll(page?: number, size?: number, sort?: string, order?: string): Observable<DataResult<any>> {
+		return this.httpClient.get<DataResult<any>>(`${this.apiUrl}?page=${page || 0}&size=${size || 10}&sort=${sort || "id"}&order=${order || "desc"}`);
+	}
+
+	getAllByIds(ids: number[], sort?: string, order?: string): Observable<DataResult<any>> {
+		return this.httpClient.get<DataResult<any>>(`${this.apiUrl}?ids=${ids}&size=${ids.length}&sort=${sort || "id"}&order=${order || "desc"}`);
+	}
+
 	getById(userId: number): Observable<DataResult<UserModel>> {
 		return this.httpClient.get<DataResult<UserModel>>(this.apiUrl + userId);
 	}
@@ -30,6 +38,15 @@ export class UserService {
 	
 	suspend(userId: number): Observable<Result> {
 		return this.httpClient.patch<Result>(`${this.apiUrl}${userId}/suspend`, {});
+	}
+
+	
+	getAllFriends(): Observable<DataResult<UserModel[]>> {
+		return this.httpClient.get<DataResult<UserModel[]>>(this.apiUrl + "friends");
+	}
+
+	toggleFriend(userId: number): Observable<Result> {
+		return this.httpClient.put<Result>(this.apiUrl + "friends/toggle", { userFriendId: userId });
 	}
 
 }

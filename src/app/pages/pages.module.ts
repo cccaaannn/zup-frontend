@@ -14,6 +14,8 @@ import { ResetPasswordComponent } from './auth-pages/reset-password/reset-passwo
 import { VerifyAccountComponent } from './auth-pages/verify-account/verify-account.component';
 import { ResendVerificationComponent } from './auth-pages/resend-verification/resend-verification.component';
 import { LinkyModule } from 'ngx-linky';
+import { UserCardComponent } from '../components/user-card/user-card.component';
+import { TruncatePipe } from '../shared/pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { LinkyModule } from 'ngx-linky';
     ForgetPasswordComponent,
     ResetPasswordComponent,
     VerifyAccountComponent,
-    ResendVerificationComponent
+    ResendVerificationComponent,
+    UserCardComponent,
+    TruncatePipe
   ],
   imports: [
     MaterialModule,

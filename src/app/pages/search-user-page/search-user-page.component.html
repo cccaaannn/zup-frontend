@@ -32,4 +32,26 @@
             </div>
         </div>
     </div>
+
+    <div class="container">
+        <div class="display-6">Favorites</div>
+        <zup-user-card 
+        class="row mb-2" 
+        *ngFor="let usersFriend of usersFriends" 
+        [user]="usersFriend" 
+        [unreadMessageCount]="getUnreadMessageCount(usersFriend.id)"
+        (userCardEvent)="onUserCardClick($event)"
+        ></zup-user-card>
+    </div>
+    <hr>
+    <div class="container">
+        <div class="display-6">Unread messages</div>
+        <zup-user-card 
+        class="row mb-2" 
+        *ngFor="let usersNonFriend of usersNonFriends" 
+        [user]="usersNonFriend" 
+        [unreadMessageCount]="getUnreadMessageCount(usersNonFriend.id)"
+        (userCardEvent)="onUserCardClick($event)"
+        ></zup-user-card>
+    </div>
 </div>
