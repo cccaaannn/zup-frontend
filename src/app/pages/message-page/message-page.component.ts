@@ -23,11 +23,16 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 
 	messages: MessageModel[] = [];
 	userId: number = -1;
-	toId: number = 2;
+	toId: number = -1;
 	toUsername: string = "";
 	currentPage: number = 1;
 	pageSize: number = 10;
 	spinner: boolean = false;
+	isFriend: boolean = false;
+
+	messageForm: FormGroup = new FormGroup({
+		messageText: new FormControl('')
+	});
 
 	requestScroll: RequestScroll = {
 		status: true,
@@ -63,11 +68,11 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 
 				this.toId = parseInt(userId);
 
-
 				this.userService.getById(this.toId).subscribe({
 					next: (res: any) => {
 						console.debug(res);
 						this.toUsername = res.data.username;
+						this.isFriend = res.data.isFriend;
 					},
 					error: (err: any) => {
 						console.debug(err);
@@ -201,9 +206,22 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 		this.router.navigate([AppRoutes.SEARCH_USER]);
 	}
 
-	messageForm: FormGroup = new FormGroup({
-		messageText: new FormControl('')
-	});
+	onFriend() {
+		this.userService.toggleFriend(this.toId).subscribe({
+			next: (res: any) => {
+				console.debug(res);
+				this.userService.getById(this.toId).subscribe({
+					next: (res: any) => {
+						console.debug(res);
+						this.isFriend = res.data.isFriend;
+					},
+					error: (err: any) => {
+						console.debug(err);
+					}
+				})
+			}
+		})
+	}
 
 	onSend() {
 		if (!this.messageForm.valid) {
