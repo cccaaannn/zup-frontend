@@ -87,7 +87,7 @@ export class LoginPageComponent implements OnInit {
 					});
 				}
 				if (RequestHelpers.is5XX(err.status)) {
-					this.snackBar.open('Server error', 'X', {
+					this.snackBar.open('Server error not intercepted', 'X', {
 						duration: 3000
 					});
 				}

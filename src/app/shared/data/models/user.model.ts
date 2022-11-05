@@ -8,5 +8,6 @@ export interface UserModel {
     email: string,
     userStatus: UserStatus,
     role: RoleModel,
-    userOnlineStatus: UserOnlineStatusModel
+    userOnlineStatus: UserOnlineStatusModel,
+    isFriend: boolean
 }
