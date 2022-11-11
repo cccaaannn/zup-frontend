@@ -30,9 +30,9 @@ export class WebsocketService {
 	initWebsocket(): void {
 		const token: string | null = this.storageService.getToken();
 		if (!token || token == null) {
-			this.snackBar.open('Failed to connect to websocket, there is no token', 'X', {
-				duration: 3000
-			});
+			// this.snackBar.open('Failed to connect to websocket, there is no token', 'X', {
+			// 	duration: 3000
+			// });
 			this.connectionStatus.next(false);
 		}
 

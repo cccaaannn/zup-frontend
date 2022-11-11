@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { map, Observable } from 'rxjs';
+import { map, Observable, retry, tap } from 'rxjs';
 import { MessageModel } from '../../data/models/message.model';
 import { UserService } from './user.service';
 import { WebsocketService } from './websocket.service';
@@ -11,10 +11,10 @@ import { WebsocketService } from './websocket.service';
 })
 export class RealtimeMessageService {
 
-	constructor(private websocketService: WebsocketService, private snackBar: MatSnackBar, private userService: UserService) { 
+	constructor(private websocketService: WebsocketService, private snackBar: MatSnackBar, private userService: UserService) {
 		this.websocketService.isConnected().subscribe({
 			next: (isConnected: boolean) => {
-				if(isConnected) {
+				if (isConnected) {
 					this.listenIncomingMessages();
 				}
 			}
@@ -25,21 +25,24 @@ export class RealtimeMessageService {
 	 * Parses raw websocket message to MessageModel.
 	*/
 	getRealtimeMessages(): Observable<MessageModel> {
-		return this.websocketService.getWebsocket().pipe(map(
-			(message: any) => {
+		return this.websocketService.getWebsocket().pipe(
+			retry({ delay: 1000 }),
+			map((message: any) => {
 				return JSON.parse(message)
-			}
-		));
+			})
+		);
 	}
 
 	/*
 	 * listens incoming realtime messages, and displays them on snackbar.
 	*/
-	listenIncomingMessages() {
-		this.websocketService.getWebsocket().subscribe({
+	private listenIncomingMessages() {
+		this.websocketService.getWebsocket().pipe(
+			retry({ delay: 1000 })
+		).subscribe({
 			next: (msg: any) => {
 				const message: MessageModel = JSON.parse(msg);
-				console.log(message);
+				console.debug(message);
 
 				this.userService.getById(message.fromId).subscribe({
 					next: (res: any) => {
@@ -53,8 +56,17 @@ export class RealtimeMessageService {
 					}
 				})
 			},
-			error: (err: any) => console.log(err),
-			complete: () => console.log('CONNECTION CLOSED')
+			error: (err: any) => {
+				console.error(err);
+				this.snackBar.open('Server disconnected', 'X', {
+					duration: 3000
+				});
+			},
+			complete: () => {
+				this.snackBar.open('Server closed the connection', 'X', {
+					duration: 3000
+				});
+			}
 		});
 	}
 
