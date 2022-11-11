@@ -10,6 +10,7 @@ import { MessageService } from 'src/app/shared/services/api/message.service';
 import { RealtimeMessageService } from 'src/app/shared/services/api/realtime-message.service';
 import { UserService } from 'src/app/shared/services/api/user.service';
 import { RequestHelpers } from 'src/app/shared/utils/request-helpers';
+import { concat, concatMap, filter, map, mergeMap, switchMap, tap } from 'rxjs';
 
 @Component({
 	selector: 'zup-message-page',
@@ -18,7 +19,7 @@ import { RequestHelpers } from 'src/app/shared/utils/request-helpers';
 })
 export class MessagePageComponent implements OnInit, AfterViewChecked {
 
-	@ViewChild('infiniteScrollDiv') 
+	@ViewChild('infiniteScrollDiv')
 	infiniteScrollDiv: ElementRef | undefined;
 
 	messages: MessageModel[] = [];
@@ -52,7 +53,7 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 
 	ngOnInit(): void {
 		const decodedToken = this.jwtService.getDecodedToken();
-		this.userId = decodedToken.id;
+		this.userId = decodedToken.data.id;
 
 		this.activatedRoute.queryParams.subscribe({
 			next: (params: Params) => {
@@ -118,21 +119,40 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 					}
 				})
 
-				this.realtimeMessageService.getRealtimeMessages().subscribe({
+
+				this.realtimeMessageService.getRealtimeMessages().pipe(
+					filter((message: MessageModel) => {
+						return message.fromId == this.toId;
+					}),
+					concatMap((message: MessageModel) => {
+						return this.messageService.setAsRead(message.id).pipe(
+							tap(readResult => console.log(readResult)),
+							map(() => message)
+						)
+					})
+				).subscribe({
 					next: (message: MessageModel) => {
-						// If incoming realtime message is coming from the the user that we are currently talking, insert the new message to the page. 
-						if (message.fromId == this.toId) {
-							this.messages.push(message);
-							this.requestScroll = { status: true, toBottom: true, height: 300 }
-						}
-					},
-					error: (err: any) => {
-						console.debug(err);
-						this.snackBar.open('Server disconnected', 'X', {
-							duration: 3000
-						});
+						this.messages.push(message);
+						this.requestScroll = { status: true, toBottom: true, height: 300 }
 					}
-				});
+				})
+
+
+				// this.realtimeMessageService.getRealtimeMessages().subscribe({
+				// 	next: (message: MessageModel) => {
+				// 		// If incoming realtime message is coming from the the user that we are currently in chat, insert the new message to the page. 
+				// 		if (message.fromId == this.toId) {
+				// 			this.messages.push(message);
+				// 			this.requestScroll = { status: true, toBottom: true, height: 300 }
+
+				// 			this.messageService.setAsRead(message.id).subscribe({
+				// 				next: (res: any) => {
+				// 					console.debug(res);
+				// 				}
+				// 			})
+				// 		}
+				// 	}
+				// });
 
 			}
 		});
@@ -165,7 +185,7 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 
 
 	getMessageBubbleColor(message: MessageModel) {
-		if(this.isMessageBelongsToCurrentUser(message)) {
+		if (this.isMessageBelongsToCurrentUser(message)) {
 			return { color: "black", backgroundColor: "#00b771" }
 		}
 		return { color: "black", backgroundColor: "#008cb7" }
@@ -179,7 +199,7 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 	}
 
 	getMessageStatus(message: MessageModel) {
-		if(this.isMessageBelongsToCurrentUser(message)) {
+		if (this.isMessageBelongsToCurrentUser(message)) {
 			return message.messageStatus;
 		}
 		return 0;
