@@ -1,57 +1,71 @@
-<div class="container">
+<div class="container h-100">
     <div class="row justify-content-center">
-        <div class="col-4">
+        <div class="card py-4 px-md-5 shadow-sm col-xxl-10">
             <div class="row">
                 <div class="col-10">
-                    <br><br>
-                    <div class="h3">
-                        Search user to start conversation
+                    <div class="display-5">
+                        ZUP
                     </div>
                 </div>
                 <div class="col-2 d-flex justify-content-end">
-                    <button mat-button (click)="onLogout()">
-                        <mat-icon>keyboard_arrow_left</mat-icon>
-                        Logout
+                    <button class="btn btn-light" (click)="onLogout()" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" title="Logout">
+                        <svg width="35" height="35" fill="currentColor" class="bi bi-arrow-left-short"
+                            viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+                            <path fill-rule="evenodd"
+                                d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                        </svg>
                     </button>
                 </div>
             </div>
+            <hr>
             <div class="row">
                 <form [formGroup]="form" (ngSubmit)="submit()">
                     <div class="row">
-                        <div class="col-9">
-                            <mat-form-field>
-                                <input type="text" matInput placeholder="username" formControlName="username" required>
-                            </mat-form-field>
+                        <div class="col-md-11 col-10">
+                            <input type="text" class="form-control" placeholder="Search for user to start chat" formControlName="username"
+                                autofocus required>
                         </div>
 
-                        <div class="col-3 d-flex justify-content-end">
-                            <button class="col-4" type="submit" mat-button>Search</button>
+                        <div class="col-md-1 col-2 d-grid">
+                            <button type="submit" class="btn btn-primary text-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" transform='rotate(90)' width="16" height="16"
+                                    fill="currentColor" class="bi bi-triangle-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
-        </div>
-    </div>
+            <hr>
+            <div class="container">
+                <div class="display-6 mb-2">Friends</div>
+                <p *ngIf="usersFriends.length === 0"><em>No friends added</em></p>
+                <zup-user-card 
+                    class="row mb-2" 
+                    *ngFor="let usersFriend of usersFriends" 
+                    [user]="usersFriend" 
+                    [unreadMessageCount]="getUnreadMessageCount(usersFriend.id)"
+                    (userCardEvent)="onUserCardClick($event)"
+                ></zup-user-card>
+            </div>
+            <hr>
+            <div class="container">
+                <div class="display-6 mb-2">Unread messages</div>
+                <p *ngIf="usersNonFriends.length === 0"><em>No unread messages</em></p>
+                <zup-user-card 
+                    class="row mb-2" 
+                    *ngFor="let usersNonFriend of usersNonFriends" 
+                    [user]="usersNonFriend" 
+                    [unreadMessageCount]="getUnreadMessageCount(usersNonFriend.id)"
+                    (userCardEvent)="onUserCardClick($event)"
+                ></zup-user-card>
+            </div>
 
-    <div class="container">
-        <div class="display-6">Favorites</div>
-        <zup-user-card 
-        class="row mb-2" 
-        *ngFor="let usersFriend of usersFriends" 
-        [user]="usersFriend" 
-        [unreadMessageCount]="getUnreadMessageCount(usersFriend.id)"
-        (userCardEvent)="onUserCardClick($event)"
-        ></zup-user-card>
-    </div>
-    <hr>
-    <div class="container">
-        <div class="display-6">Unread messages</div>
-        <zup-user-card 
-        class="row mb-2" 
-        *ngFor="let usersNonFriend of usersNonFriends" 
-        [user]="usersNonFriend" 
-        [unreadMessageCount]="getUnreadMessageCount(usersNonFriend.id)"
-        (userCardEvent)="onUserCardClick($event)"
-        ></zup-user-card>
+        </div>
     </div>
 </div>

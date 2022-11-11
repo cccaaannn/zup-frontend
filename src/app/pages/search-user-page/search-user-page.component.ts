@@ -11,6 +11,9 @@ import { UserCardEvent } from 'src/app/shared/data/types/user-card-event';
 import { WebsocketService } from 'src/app/shared/services/api/websocket.service';
 import { MessageService } from 'src/app/shared/services/api/message.service';
 import { MessageCountModel } from 'src/app/shared/data/models/message-count';
+import { RealtimeMessageService } from 'src/app/shared/services/api/realtime-message.service';
+import { MessageModel } from 'src/app/shared/data/models/message.model';
+import { debounceTime } from 'rxjs';
 
 @Component({
 	selector: 'zup-search-user-page',
@@ -25,7 +28,8 @@ export class SearchUserPageComponent implements OnInit {
 		private router: Router,
 		private snackBar: MatSnackBar,
 		private storageService: StorageService,
-		private websocketService: WebsocketService
+		private websocketService: WebsocketService,
+		private realtimeMessageService: RealtimeMessageService
 	) { }
 
 	form: FormGroup = new FormGroup({
@@ -37,6 +41,20 @@ export class SearchUserPageComponent implements OnInit {
 	unreadMessages: { [fromId: string]: UnreadMessageDetail } = {}
 
 	ngOnInit(): void {
+		this.fillPage();
+
+		// Listen incoming messages to refresh the page for unread messages, debounce time is used for throttling the requests.
+		this.realtimeMessageService.getRealtimeMessages()
+		.pipe(debounceTime(1000)).subscribe({
+			next: (message: MessageModel) => {
+				console.debug("Fetch search page");
+				this.fillPage();
+			}
+		})
+	}
+
+
+	fillPage() {
 		this.userService.getAllFriends().subscribe({
 			next: (userFriends: DataResult<UserModel[]>) => {
 				console.debug(userFriends);
@@ -78,13 +96,14 @@ export class SearchUserPageComponent implements OnInit {
 		})
 	}
 
+
+
 	getUnreadMessageCount(userId: number): number {
 		if (this.unreadMessages[userId]) {
 			return this.unreadMessages[userId].messageCount;
 		}
 		return 0;
 	}
-
 
 	submit() {
 		if (this.form.valid) {
