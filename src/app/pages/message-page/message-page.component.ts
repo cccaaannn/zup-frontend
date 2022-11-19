@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -10,22 +10,28 @@ import { MessageService } from 'src/app/shared/services/api/message.service';
 import { RealtimeMessageService } from 'src/app/shared/services/api/realtime-message.service';
 import { UserService } from 'src/app/shared/services/api/user.service';
 import { RequestHelpers } from 'src/app/shared/utils/request-helpers';
-import { concat, concatMap, filter, map, mergeMap, switchMap, tap } from 'rxjs';
+import { concatMap, filter, map, repeat, Subscription, tap } from 'rxjs';
+import { UserOnlineStatusModel } from 'src/app/shared/data/models/user-online-status.model';
+import { DataResult } from 'src/app/shared/data/models/results/DataResult';
+import { isThisYear, isToday } from 'src/app/shared/utils/date-utils';
 
 @Component({
 	selector: 'zup-message-page',
 	templateUrl: './message-page.component.html',
 	styleUrls: ['./message-page.component.scss']
 })
-export class MessagePageComponent implements OnInit, AfterViewChecked {
+export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked {
 
 	@ViewChild('infiniteScrollDiv')
 	infiniteScrollDiv: ElementRef | undefined;
+
+	toOnlineStatusSubscription!: Subscription;
 
 	messages: MessageModel[] = [];
 	userId: number = -1;
 	toId: number = -1;
 	toUsername: string = "";
+	toOnlineStatus!: UserOnlineStatusModel;
 	currentPage: number = 1;
 	pageSize: number = 10;
 	spinner: boolean = false;
@@ -119,46 +125,46 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 					}
 				})
 
+				// Start updating to users online status
+				this.startUpdatingToOnlineStatus();
 
 				this.realtimeMessageService.getRealtimeMessages().pipe(
+					// Filter messages to get only messages on the current conversation 
 					filter((message: MessageModel) => {
 						return message.fromId == this.toId;
 					}),
+					// Set incoming message as read
 					concatMap((message: MessageModel) => {
 						return this.messageService.setAsRead(message.id).pipe(
 							tap(readResult => console.log(readResult)),
 							map(() => message)
 						)
+					}),
+					// Get "to" users updated online status 
+					concatMap((message: MessageModel) => {
+						return this.userService.getOnlineStatus(this.toId).pipe(
+							tap(toOnlineStatusResult => console.log(toOnlineStatusResult)),
+							map(toOnlineStatusResult => toOnlineStatusResult.data),
+							map((toOnlineStatus) => { return { message: message, toOnlineStatus: toOnlineStatus } })
+						)
 					})
 				).subscribe({
-					next: (message: MessageModel) => {
+					next: ({ message, toOnlineStatus }: any) => {
 						this.messages.push(message);
 						this.requestScroll = { status: true, toBottom: true, height: 300 }
+						this.toOnlineStatus = { id: toOnlineStatus.id, onlineStatus: toOnlineStatus.onlineStatus, lastOnline: new Date(toOnlineStatus.lastOnline) };
 					}
 				})
-
-
-				// this.realtimeMessageService.getRealtimeMessages().subscribe({
-				// 	next: (message: MessageModel) => {
-				// 		// If incoming realtime message is coming from the the user that we are currently in chat, insert the new message to the page. 
-				// 		if (message.fromId == this.toId) {
-				// 			this.messages.push(message);
-				// 			this.requestScroll = { status: true, toBottom: true, height: 300 }
-
-				// 			this.messageService.setAsRead(message.id).subscribe({
-				// 				next: (res: any) => {
-				// 					console.debug(res);
-				// 				}
-				// 			})
-				// 		}
-				// 	}
-				// });
 
 			}
 		});
 
 	}
 
+
+	ngOnDestroy() {
+		this.toOnlineStatusSubscription.unsubscribe();
+	}
 
 	ngAfterViewChecked() {
 		this.scrollTo();
@@ -209,7 +215,6 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 		return this.isFriend ? "Remove from friend" : "Add to friend"
 	}
 
-
 	onScroll(): void {
 		this.spinner = true;
 		this.messageService.getConversation(this.toId, ++this.currentPage).subscribe({
@@ -224,6 +229,32 @@ export class MessagePageComponent implements OnInit, AfterViewChecked {
 				this.spinner = false;
 			}
 		})
+	}
+
+	startUpdatingToOnlineStatus() {
+		this.toOnlineStatusSubscription = this.userService.getOnlineStatus(this.toId).pipe(
+			repeat({
+				delay: 5000
+			})
+		).subscribe({
+			next: (res: DataResult<UserOnlineStatusModel>) => {
+				console.log(res);
+				this.toOnlineStatus = { id: res.data.id, onlineStatus: res.data.onlineStatus, lastOnline: new Date(res.data.lastOnline) };
+			},
+			error: (err: any) => {
+				console.log(err);
+			}
+		})
+	}
+
+	getLastOnlineDatePipeFormat(date: Date) {
+		if (!isThisYear(date)) {
+			return "MM d, y, h:mm"
+		}
+		if (isToday(date)) {
+			return "h:mm"
+		}
+		return "MM d, h:mm"
 	}
 
 	onBack() {

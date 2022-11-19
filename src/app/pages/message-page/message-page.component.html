@@ -6,6 +6,12 @@
                     <div class="display-5">
                         {{toUsername}}
                     </div>
+                    <div *ngIf="toOnlineStatus && toOnlineStatus.onlineStatus === 'OFFLINE'" class="fw-light">
+                        Last online {{toOnlineStatus.lastOnline | date: getLastOnlineDatePipeFormat(toOnlineStatus.lastOnline)}}
+                    </div>
+                    <div *ngIf="toOnlineStatus && toOnlineStatus.onlineStatus === 'ONLINE'" class="fw-light">
+                        Online
+                    </div>
                 </div>
                 <div class="col-sm-2 col-4 d-flex justify-content-end">
                     <button class="btn btn-light" (click)="onFriend()" data-bs-toggle="tooltip"

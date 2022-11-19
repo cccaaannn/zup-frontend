@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Pagination } from '../../data/models/pagination';
 import { DataResult } from '../../data/models/results/DataResult';
 import { Result } from '../../data/models/results/Result';
+import { UserOnlineStatusModel } from '../../data/models/user-online-status.model';
 import { UserModel } from '../../data/models/user.model';
 
 
@@ -48,6 +49,11 @@ export class UserService {
 
 	toggleFriend(userId: number): Observable<Result> {
 		return this.httpClient.put<Result>(this.apiUrl + "friends/toggle", { userFriendId: userId });
+	}
+
+
+	getOnlineStatus(userId: number): Observable<DataResult<UserOnlineStatusModel>> {
+		return this.httpClient.get<DataResult<UserOnlineStatusModel>>(`${this.apiUrl}${userId}/online-status`);
 	}
 
 }
