@@ -212,7 +212,7 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 	}
 
 	getFriendTooltipText() {
-		return this.isFriend ? "Remove from friend" : "Add to friend"
+		return this.isFriend ? "Remove chat from bookmark" : "Bookmark chat"
 	}
 
 	onScroll(): void {
@@ -297,7 +297,10 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 
 		this.messageService.send(message).subscribe({
 			next: (res: any) => {
-				this.messages.push(res);
+				// Don't push self messages to prevent duplicate view
+				if (this.userId != this.toId) {
+					this.messages.push(res);
+				}
 				this.requestScroll = { status: true, toBottom: true, height: 300 }
 				this.messageForm.setValue({ messageText: "" });
 			},
