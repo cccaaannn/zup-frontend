@@ -43,8 +43,8 @@
             </div>
             <hr>
             <div class="container">
-                <div class="display-6 mb-2">Friends</div>
-                <p *ngIf="usersFriends.length === 0"><em>No friends added</em></p>
+                <div class="display-6 mb-2">Bookmarks</div>
+                <p *ngIf="usersFriends.length === 0"><em>No chats bookmarked</em></p>
                 <zup-user-card 
                     class="row mb-2" 
                     *ngFor="let usersFriend of usersFriends" 

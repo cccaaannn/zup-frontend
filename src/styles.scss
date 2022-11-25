@@ -1,3 +1,4 @@
+// ----- ----- Bootstrap customizations ----- -----
 :root {
     --primary: #00b771;
     --background: white;
@@ -16,28 +17,16 @@ $theme-colors: (
 
 $border-radius: 0.15rem;
 
-/* width */
-::-webkit-scrollbar {
-    width: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: #eee;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #00b771;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #00b771;
-}
 
 .form-check-input:checked {
     background-color: #00b771 !important;
+}
+
+.btn-light:hover {
+    border-color: #00b771 !important;
+    box-shadow: 0px 0px 1px 3px #00b77184;
+    background-color: #00b77184 !important;
+    outline: none;
 }
 
 textarea:focus,
@@ -51,5 +40,51 @@ input[type="checkbox"]:focus,
     box-shadow: 0px 0px 1px 4px #00b77184;
     outline: none;
 }
+// ----- ----- ----- ----- -----
 
+
+
+// ----- ----- Scroll ----- -----
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #eee;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00b771;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00b771;
+}
+// ----- ----- ----- ----- -----
+
+
+
+// ----- ----- Dark mode ----- -----
+.dark {
+    background-color: #282828 !important;
+
+    * {
+        color: white !important;
+    }
+
+    .card,
+    input {
+        background-color: #323232 !important;
+    }
+
+    .btn-light:hover {
+        background-color: #00b77184 !important;
+    }
+}
+// ----- ----- ----- ----- -----
+
+
+
+// ----- ----- Import bootstrap ----- -----
 @import 'node_modules/bootstrap/scss/bootstrap';
+// ----- ----- ----- ----- -----

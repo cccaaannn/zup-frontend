@@ -3,17 +3,16 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AppRoutes } from 'src/app/shared/data/enums/routes';
-import { StorageService } from 'src/app/shared/services/storage.service';
 import { UserService } from 'src/app/shared/services/api/user.service';
 import { UserModel } from 'src/app/shared/data/models/user.model';
 import { DataResult } from 'src/app/shared/data/models/results/DataResult';
 import { UserCardEvent } from 'src/app/shared/data/types/user-card-event';
-import { WebsocketService } from 'src/app/shared/services/api/websocket.service';
 import { MessageService } from 'src/app/shared/services/api/message.service';
 import { MessageCountModel } from 'src/app/shared/data/models/message-count';
 import { RealtimeMessageService } from 'src/app/shared/services/api/realtime-message.service';
 import { MessageModel } from 'src/app/shared/data/models/message.model';
 import { debounceTime } from 'rxjs';
+import { SessionService } from 'src/app/shared/services/session.service';
 
 @Component({
 	selector: 'zup-search-user-page',
@@ -27,8 +26,7 @@ export class SearchUserPageComponent implements OnInit {
 		private messageService: MessageService,
 		private router: Router,
 		private snackBar: MatSnackBar,
-		private storageService: StorageService,
-		private websocketService: WebsocketService,
+		private sessionService: SessionService,
 		private realtimeMessageService: RealtimeMessageService
 	) { }
 
@@ -45,12 +43,12 @@ export class SearchUserPageComponent implements OnInit {
 
 		// Listen incoming messages to refresh the page for unread messages, debounce time is used for throttling the requests.
 		this.realtimeMessageService.getRealtimeMessages()
-		.pipe(debounceTime(1000)).subscribe({
-			next: (message: MessageModel) => {
-				console.debug("Fetch search page");
-				this.fillPage();
-			}
-		})
+			.pipe(debounceTime(1000)).subscribe({
+				next: (message: MessageModel) => {
+					console.debug("Fetch search page");
+					this.fillPage();
+				}
+			})
 	}
 
 
@@ -80,7 +78,7 @@ export class SearchUserPageComponent implements OnInit {
 								nonFriendIds.push(parseInt(key));
 							}
 						}
-						if(nonFriendIds.length != 0) {
+						if (nonFriendIds.length != 0) {
 							this.userService.getAllByIds(nonFriendIds).subscribe({
 								next: (nonFriendUsers: DataResult<any>) => {
 									console.debug(nonFriendUsers, "non friend users");
@@ -123,9 +121,7 @@ export class SearchUserPageComponent implements OnInit {
 	}
 
 	onLogout() {
-		this.storageService.removeToken();
-		this.websocketService.closeWebsocket();
-		this.router.navigate([AppRoutes.LOGIN]);
+		this.sessionService.logout();
 	}
 
 

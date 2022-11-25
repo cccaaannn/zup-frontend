@@ -46,4 +46,16 @@ export class StorageService {
 		this.remove(StorageNames.REMEMBER_ME);
 	}
 
+	saveTheme(userName: string): void {
+		this.save(StorageNames.THEME, userName);
+	}
+
+	getTheme(): string | null {
+		return this.get(StorageNames.THEME);
+	}
+
+	removeTheme(): void {
+		this.remove(StorageNames.THEME);
+	}
+
 }
