@@ -14,7 +14,7 @@ import { UserModel } from '../../data/models/user.model';
 })
 export class UserService {
 
-	private apiUrl: string = environment.userServiceApiUrl + "/users/";
+	private apiUrl: string = environment.userServiceApiUrl + "/users";
 
 	constructor(private httpClient: HttpClient) { }
 
@@ -27,33 +27,33 @@ export class UserService {
 	}
 
 	getById(userId: number): Observable<DataResult<UserModel>> {
-		return this.httpClient.get<DataResult<UserModel>>(this.apiUrl + userId);
+		return this.httpClient.get<DataResult<UserModel>>(this.apiUrl + "/" + userId);
 	}
 
 	getByUsername(username: string): Observable<DataResult<UserModel>> {
-		return this.httpClient.get<DataResult<UserModel>>(this.apiUrl + "username/" + username);
+		return this.httpClient.get<DataResult<UserModel>>(this.apiUrl + "/username/" + username);
 	}
 
 	activate(userId: number): Observable<Result> {
-		return this.httpClient.patch<Result>(`${this.apiUrl}${userId}/activate`, {});
+		return this.httpClient.patch<Result>(`${this.apiUrl}/${userId}/activate`, {});
 	}
 	
 	suspend(userId: number): Observable<Result> {
-		return this.httpClient.patch<Result>(`${this.apiUrl}${userId}/suspend`, {});
+		return this.httpClient.patch<Result>(`${this.apiUrl}/${userId}/suspend`, {});
 	}
 
 	
 	getAllFriends(): Observable<DataResult<UserModel[]>> {
-		return this.httpClient.get<DataResult<UserModel[]>>(this.apiUrl + "friends");
+		return this.httpClient.get<DataResult<UserModel[]>>(this.apiUrl + "/friends");
 	}
 
 	toggleFriend(userId: number): Observable<Result> {
-		return this.httpClient.put<Result>(this.apiUrl + "friends/toggle", { userFriendId: userId });
+		return this.httpClient.put<Result>(this.apiUrl + "/friends/toggle", { userFriendId: userId });
 	}
 
 
 	getOnlineStatus(userId: number): Observable<DataResult<UserOnlineStatusModel>> {
-		return this.httpClient.get<DataResult<UserOnlineStatusModel>>(`${this.apiUrl}${userId}/online-status`);
+		return this.httpClient.get<DataResult<UserOnlineStatusModel>>(`${this.apiUrl}/${userId}/online-status`);
 	}
 
 }
