@@ -40,7 +40,6 @@ export class WebsocketService {
 
 		// Check for e expired token before connection.
 		if(this.jwtService.isExpired()) {
-			console.log("token is expired socket not connected");
 			this.connectionStatus.next(false);
 			return;
 		}

@@ -46,7 +46,7 @@ export class RealtimeMessageService {
 
 				this.userService.getById(message.fromId).subscribe({
 					next: (res: any) => {
-						console.log(res);
+						console.debug(res);
 						const senderUsername: string = res.data.username;
 						this.snackBar.open(`${senderUsername}: ${message.messageText}`, 'X', {
 							horizontalPosition: "left",

@@ -63,8 +63,6 @@ export class LoginPageComponent implements OnInit {
 		}
 		this.authService.login(this.form.value).subscribe({
 			next: (res: any) => {
-				console.log(res);
-
 				const token: string = res.data.token;
 
 				this.storageService.saveToken(token);
@@ -80,7 +78,6 @@ export class LoginPageComponent implements OnInit {
 				this.router.navigate([AppRoutes.SEARCH_USER]);
 			},
 			error: (err: any) => {
-				console.log(err);
 				if (RequestHelpers.is4XX(err.status)) {
 					this.snackBar.open(err.error.message, 'X', {
 						duration: 3000

@@ -1,19 +1,23 @@
 import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AppRoutes } from 'src/app/shared/data/enums/routes';
-import { MessageModel } from 'src/app/shared/data/models/message.model';
-import { RequestScroll } from 'src/app/shared/data/types/request-scroll';
-import { JwtService } from 'src/app/shared/services/jwt.service';
-import { MessageService } from 'src/app/shared/services/api/message.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormControl, FormGroup } from '@angular/forms';
+
+import { concatMap, filter, map, repeat, Subscription, tap } from 'rxjs';
+
 import { RealtimeMessageService } from 'src/app/shared/services/api/realtime-message.service';
+import { UserOnlineStatusModel } from 'src/app/shared/data/models/user-online-status.model';
+import { MessageDirection } from 'src/app/shared/data/enums/message-direction';
+import { MessageService } from 'src/app/shared/services/api/message.service';
+import { DataResult } from 'src/app/shared/data/models/results/DataResult';
+import { RequestScroll } from 'src/app/shared/data/types/request-scroll';
+import { MessageModel } from 'src/app/shared/data/models/message.model';
 import { UserService } from 'src/app/shared/services/api/user.service';
 import { RequestHelpers } from 'src/app/shared/utils/request-helpers';
-import { concatMap, filter, map, repeat, Subscription, tap } from 'rxjs';
-import { UserOnlineStatusModel } from 'src/app/shared/data/models/user-online-status.model';
-import { DataResult } from 'src/app/shared/data/models/results/DataResult';
 import { isThisYear, isToday } from 'src/app/shared/utils/date-utils';
+import { JwtService } from 'src/app/shared/services/jwt.service';
+import { AppRoutes } from 'src/app/shared/data/enums/routes';
+
 
 @Component({
 	selector: 'zup-message-page',
@@ -25,22 +29,30 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 	@ViewChild('infiniteScrollDiv')
 	infiniteScrollDiv: ElementRef | undefined;
 
+	// For update current 'to' users online status
 	toOnlineStatusSubscription!: Subscription;
 
+	// Conversation messages
 	messages: MessageModel[] = [];
+	
+	// User information
 	userId: number = -1;
 	toId: number = -1;
 	toUsername: string = "";
 	toOnlineStatus!: UserOnlineStatusModel;
+	isFriend: boolean = false;
+	
+	// Pagination
 	currentPage: number = 1;
 	pageSize: number = 10;
 	spinner: boolean = false;
-	isFriend: boolean = false;
 
+	// Message form
 	messageForm: FormGroup = new FormGroup({
 		messageText: new FormControl('')
 	});
 
+	// Scroll object
 	requestScroll: RequestScroll = {
 		status: true,
 		toBottom: true,
@@ -56,6 +68,9 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 		private activatedRoute: ActivatedRoute,
 		private userService: UserService
 	) { }
+
+
+	// ---------- ---------- Angular lifecycle functions ---------- ----------
 
 	ngOnInit(): void {
 		const decodedToken = this.jwtService.getDecodedToken();
@@ -75,6 +90,7 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 
 				this.toId = parseInt(userId);
 
+				// Get user detail
 				this.userService.getById(this.toId).subscribe({
 					next: (res: any) => {
 						console.debug(res);
@@ -96,6 +112,7 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 					}
 				})
 
+				// Get conversation messages
 				this.messageService.getConversation(this.toId).subscribe({
 					next: (res: any) => {
 						console.debug(res);
@@ -136,14 +153,14 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 					// Set incoming message as read
 					concatMap((message: MessageModel) => {
 						return this.messageService.setAsRead(message.id).pipe(
-							tap(readResult => console.log(readResult)),
+							tap(readResult => console.debug(readResult)),
 							map(() => message)
 						)
 					}),
 					// Get "to" users updated online status 
 					concatMap((message: MessageModel) => {
 						return this.userService.getOnlineStatus(this.toId).pipe(
-							tap(toOnlineStatusResult => console.log(toOnlineStatusResult)),
+							tap(toOnlineStatusResult => console.debug(toOnlineStatusResult)),
 							map(toOnlineStatusResult => toOnlineStatusResult.data),
 							map((toOnlineStatus) => { return { message: message, toOnlineStatus: toOnlineStatus } })
 						)
@@ -161,7 +178,6 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 
 	}
 
-
 	ngOnDestroy() {
 		this.toOnlineStatusSubscription.unsubscribe();
 	}
@@ -170,50 +186,11 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 		this.scrollTo();
 	}
 
-
-	scrollTo() {
-		if (this.requestScroll.status) {
-			this.requestScroll.status = false;
-
-			if (!this.infiniteScrollDiv) {
-				return;
-			}
-
-			if (this.requestScroll.toBottom) {
-				this.infiniteScrollDiv.nativeElement.scrollTop = this.infiniteScrollDiv.nativeElement.scrollHeight
-				return;
-			}
-
-			this.infiniteScrollDiv.nativeElement.scrollTop = this.infiniteScrollDiv.nativeElement.scrollTop + this.requestScroll.height;
-			return;
-		}
-	}
+	// ---------- ---------- ---------- ---------- ----------
 
 
-	getMessageBubbleColor(message: MessageModel) {
-		if (this.isMessageBelongsToCurrentUser(message)) {
-			return { color: "black", backgroundColor: "#00b771" }
-		}
-		return { color: "black", backgroundColor: "#008cb7" }
-	}
 
-	isMessageBelongsToCurrentUser(message: MessageModel): boolean {
-		if (message.fromId == this.userId) { // if message is mine it will be on the right side of the page.
-			return true;
-		}
-		return false;
-	}
-
-	getMessageStatus(message: MessageModel) {
-		if (this.isMessageBelongsToCurrentUser(message)) {
-			return message.messageStatus;
-		}
-		return 0;
-	}
-
-	getFriendTooltipText() {
-		return this.isFriend ? "Remove chat from bookmark" : "Bookmark chat"
-	}
+	// ---------- ---------- Requests ---------- ----------
 
 	onScroll(): void {
 		this.spinner = true;
@@ -238,13 +215,59 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 			})
 		).subscribe({
 			next: (res: DataResult<UserOnlineStatusModel>) => {
-				console.log(res);
+				console.debug(res);
 				this.toOnlineStatus = { id: res.data.id, onlineStatus: res.data.onlineStatus, lastOnline: new Date(res.data.lastOnline) };
 			},
 			error: (err: any) => {
-				console.log(err);
+				console.debug(err);
 			}
 		})
+	}
+
+	// ---------- ---------- ---------- ---------- ----------
+
+
+
+	// ---------- ---------- Utils ---------- ----------
+
+	getMessageDirection(message: MessageModel): MessageDirection {
+		if (message.fromId == this.userId) {
+			return MessageDirection.OUTGOING;
+		}
+		return MessageDirection.INCOMING;
+	}
+
+	// if message is mine it will be on the right side of the page.
+	isMessageOutgoing(message: MessageModel): boolean {
+		if (this.getMessageDirection(message) == MessageDirection.OUTGOING) { 
+			return true;
+		}
+		return false;
+	}
+
+	getMessageStatus(message: MessageModel) {
+		if (this.isMessageOutgoing(message)) {
+			return message.messageStatus;
+		}
+		return 0;
+	}
+
+	scrollTo() {
+		if (this.requestScroll.status) {
+			this.requestScroll.status = false;
+
+			if (!this.infiniteScrollDiv) {
+				return;
+			}
+
+			if (this.requestScroll.toBottom) {
+				this.infiniteScrollDiv.nativeElement.scrollTop = this.infiniteScrollDiv.nativeElement.scrollHeight
+				return;
+			}
+
+			this.infiniteScrollDiv.nativeElement.scrollTop = this.infiniteScrollDiv.nativeElement.scrollTop + this.requestScroll.height;
+			return;
+		}
 	}
 
 	getLastOnlineDatePipeFormat(date: Date) {
@@ -256,6 +279,12 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 		}
 		return "MM d, h:mm"
 	}
+
+	// ---------- ---------- ---------- ---------- ----------
+
+
+
+	// ---------- ---------- Event functions ---------- ----------
 
 	onBack() {
 		this.router.navigate([AppRoutes.SEARCH_USER]);
@@ -313,8 +342,6 @@ export class MessagePageComponent implements OnInit, OnDestroy, AfterViewChecked
 		});
 	}
 
+	// ---------- ---------- ---------- ---------- ----------
+
 }
-
-
-
-

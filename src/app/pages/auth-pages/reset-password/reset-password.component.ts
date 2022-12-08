@@ -58,14 +58,12 @@ export class ResetPasswordComponent implements OnInit {
 
 		this.accountService.resetPassword(body).subscribe({
 			next: (res: any) => {
-				console.log(res);
 				this.snackBar.open(this.formatErrors("Password change successful"), 'X', {
 					duration: 3000
 				});
 				this.router.navigate([AppRoutes.LOGIN]);
 			},
 			error: (err: any) => {
-				console.log(err);
 				this.snackBar.open(this.formatErrors(err.error.errors), 'X', {
 					duration: 3000
 				});

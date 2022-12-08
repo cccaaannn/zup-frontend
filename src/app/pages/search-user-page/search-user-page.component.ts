@@ -107,11 +107,9 @@ export class SearchUserPageComponent implements OnInit {
 		if (this.form.valid) {
 			this.userService.getByUsername(this.form.value.username).subscribe({
 				next: (res: any) => {
-					console.log(res);
 					this.router.navigate([AppRoutes.MESSAGES], { queryParams: { user: res.data.id } });
 				},
 				error: (err: any) => {
-					console.log(err);
 					this.snackBar.open('user not found', 'X', {
 						duration: 3000
 					});

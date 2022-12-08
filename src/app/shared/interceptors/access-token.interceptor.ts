@@ -16,13 +16,12 @@ export class AccessTokenInterceptor {
 	constructor(private storageService: StorageService, private jwtService: JwtService, private router: Router, private snackBar: MatSnackBar) { }
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-		console.info(`Intercepting request: ${request.url}`);
-
 		if (ApiUtils.isUnguardedApiPath(request.url)) {
-			console.info("Unguarded api request");
+			console.info(`Intercepting request (unguarded path): ${request.url}`);
 			return next.handle(request);
 		}
-
+		console.info(`Intercepting request: ${request.url}`);
+		
 		// undefined or null tokens are also considered expired.
 		if (this.jwtService.isExpired()) {
 			this.router.navigate([AppRoutes.LOGIN]);

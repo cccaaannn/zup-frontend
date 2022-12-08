@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { MessageDirection } from 'src/app/shared/data/enums/message-direction';
 import { isThisYear, isToday } from 'src/app/shared/utils/date-utils';
 
 @Component({
@@ -18,7 +19,14 @@ export class MessageBubbleComponent {
 	messageStatus: number = 0;
 
 	@Input()
-	theme: MessageBubbleComponentTheme = { color: "black", backgroundColor: "#00b73d" }
+	messageDirection: MessageDirection = MessageDirection.OUTGOING;
+
+	@Input()
+	theme!: MessageBubbleComponentTheme;
+
+	incomingMessageTheme: MessageBubbleComponentTheme = { color: "black", backgroundColor: "#00b771" };
+	outgoingMessageTheme: MessageBubbleComponentTheme = { color: "black", backgroundColor: "#008cb7" };
+
 
 	constructor() { }
 
@@ -34,6 +42,17 @@ export class MessageBubbleComponent {
 		}
 
 		return `${date.toLocaleDateString('tr-TR')} - ${date.toLocaleTimeString('tr-TR').substring(0, 5)}`;
+	}
+
+	getMessageBubbleColor() {
+		if(this.theme) {
+			return {'color': this.theme.color, 'background-color': this.theme.backgroundColor};
+		}
+
+		if (this.messageDirection == MessageDirection.INCOMING) {
+			return {'color': this.incomingMessageTheme.color, 'background-color': this.incomingMessageTheme.backgroundColor};
+		}
+		return {'color': this.outgoingMessageTheme.color, 'background-color': this.outgoingMessageTheme.backgroundColor};
 	}
 
 }

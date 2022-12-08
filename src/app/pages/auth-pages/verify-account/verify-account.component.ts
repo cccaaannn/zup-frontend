@@ -29,11 +29,9 @@ export class VerifyAccountComponent implements OnInit {
 
 			this.accountService.verifyAccount({ token: token }).subscribe({
 				next: (result: any) => {
-					console.log(result);
 					this.activationStatus = "Account activated successfully";
 				},
 				error: (err: any) => {
-					console.log(err);
 					this.activationStatus = "Account activation failed";
 				}
 			})

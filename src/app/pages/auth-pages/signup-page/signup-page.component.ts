@@ -46,11 +46,9 @@ export class SignupPageComponent {
 		
 		this.authService.signup(this.form.value).subscribe({
 			next: (res: any) => {
-				console.log(res);
 				this.router.navigate([AppRoutes.LOGIN]);
 			},
 			error: (err: any) => {
-				console.log(err);
 				this.snackBar.open(this.formatErrors(err.error.errors), 'X', {
 					duration: 3000
 				});
