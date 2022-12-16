@@ -1,19 +1,42 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <title>Zup Message</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  
-  
-  <!-- Load extra env for dynamic api url change -->
-  <script src="assets/env.js"></script>
+
+	<!-- General -->
+	<title>Zup</title>
+	<link rel="icon" type="image/x-icon" href="assets/icons/favicon.ico" />
+
+	<!-- Meta -->
+	<base href="/">
+	<meta charset="utf-8" />
+	<meta name="description" content="Zup messaging application." />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- Fonts-css -->
+	<link rel="preconnect" href="https://fonts.gstatic.com" />
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+
+	<!-- open graph -->
+	<meta property="og:title" content="Zup" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://zupmessage.com" />
+	<meta property="og:description" content="Start messaging with Zup." />
+	<meta property="og:image" content="https://raw.githubusercontent.com/cccaaannn/zup-frontend/master/src/assets/icons/zup-icon-512x512.png" />
+
+	<!-- pwa -->
+	<meta name="theme-color" content="#00b771" />
+	<link rel="manifest" href="assets/manifest.json" />
+	<link rel="apple-touch-icon" href="assets/icons/icon-192x192.png" />
+
+	<!-- Dynamic env -->
+	<script src="assets/env.js"></script>
+
 </head>
+
 <body class="mat-typography">
-  <zup-root></zup-root>
+	<zup-root></zup-root>
 </body>
+
 </html>
