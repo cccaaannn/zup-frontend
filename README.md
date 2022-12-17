@@ -10,6 +10,7 @@
 - [Frontend](https://github.com/cccaaannn/zup-frontend) (This project)
 - [User service](https://github.com/cccaaannn/zup-user-service)
 - [Message service](https://github.com/cccaaannn/zup-message-service)
+- [K8s configurations](https://github.com/cccaaannn/zup-k8s)
 
 <hr>
 
